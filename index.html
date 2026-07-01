@@ -39,7 +39,6 @@
 
   ::selection{background:var(--accent);color:#0a0510;}
 
-  /* ---------- Background grid / particles ---------- */
   #bg-canvas{
     position:fixed;
     inset:0;
@@ -57,7 +56,6 @@
                       radial-gradient(circle at 80% 70%, rgba(139,92,246,0.05), transparent 40%);
   }
 
-  /* ---------- Nav ---------- */
   nav{
     position:fixed;
     top:0;left:0;right:0;
@@ -119,7 +117,6 @@
   .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;z-index:110;}
   .burger span{width:24px;height:2px;background:var(--text);}
 
-  /* ---------- Hero ---------- */
   .hero{
     position:relative;
     z-index:2;
@@ -177,7 +174,6 @@
     background-clip:text;
     color:transparent;
   }
-
 
   .hero p.desc{
     max-width:600px;
@@ -266,7 +262,6 @@
   .scroll-hint .line{width:1px;height:26px;background:linear-gradient(var(--accent), transparent);}
   @keyframes bob{0%,100%{transform:translate(-50%,0);}50%{transform:translate(-50%,8px);}}
 
-  /* ---------- Section shared ---------- */
   section{
     position:relative;
     z-index:2;
@@ -298,7 +293,6 @@
   }
   .reveal.visible{opacity:1;transform:translateY(0);}
 
-  /* ---------- Projects ---------- */
   .projects-list{
     max-width:1000px;
     margin:0 auto;
@@ -336,6 +330,7 @@
     content:'';
     position:absolute;inset:0;
     background:radial-gradient(circle at 30% 20%, rgba(255,255,255,0.08), transparent 60%);
+    pointer-events:none;
   }
   .p-media .media-icon{
     font-family:var(--font-mono);
@@ -347,6 +342,14 @@
     border-radius:10px;
     text-transform:uppercase;
     z-index:1;
+  }
+  .p-media img, .p-media video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    position:relative;
+    z-index:1;
+    display:block;
   }
 
   .p-body{
@@ -395,7 +398,6 @@
     color:#f0b3ff;
   }
 
-  /* ---------- Skills ---------- */
   .skills-grid{
     max-width:1000px;
     margin:0 auto;
@@ -433,12 +435,11 @@
     line-height:1.55;
   }
 
-  /* ---------- Contact ---------- */
   .contact-grid{
-    max-width:760px;
+    max-width:340px;
     margin:0 auto;
     display:grid;
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:1fr;
     gap:22px;
   }
   .contact-card{
@@ -476,7 +477,6 @@
   }
   .contact-card button:hover, .contact-card a.cbtn:hover{background:rgba(255,79,216,0.18);}
 
-  /* ---------- Footer ---------- */
   footer{
     position:relative;
     z-index:2;
@@ -500,7 +500,6 @@
   .f-links a:hover{color:var(--text);}
   footer .copyright{color:#555c70; font-size:0.78rem;}
 
-  /* ---------- Music toggle ---------- */
   .music-btn{
     position:fixed;
     bottom:28px;
@@ -537,7 +536,6 @@
     50%{height:16px;}
   }
 
-  /* ---------- Responsive ---------- */
   @media (max-width: 860px){
     .nav-links{
       position:fixed;
@@ -558,7 +556,6 @@
     .project-card, .project-card.reverse{grid-template-columns:1fr;}
     .project-card.reverse .p-media, .project-card.reverse .p-body{order:0;}
     .p-media{min-height:180px;}
-    .contact-grid{grid-template-columns:1fr;}
     .hero-stats{gap:26px;}
   }
 </style>
@@ -611,7 +608,7 @@
   <div class="projects-list">
 
     <div class="project-card reverse reveal">
-      <div class="p-media"><img src="images/threshold.jpg" alt="B"></div>
+      <div class="p-media"><img src="images/threshold.jpg" alt="THRESHOLD"></div>
       <div class="p-body">
         <span class="p-status dev"><span class="dot-pulse"></span>In Dev</span>
         <h3>THRESHOLD — Asymmetric Horror</h3>
@@ -680,12 +677,6 @@
       <div class="handle">regust</div>
       <button onclick="copyDiscord()">Copy Username</button>
     </div>
-    <div class="contact-card reveal">
-      <div class="c-icon">🛒</div>
-      <h4>Playerok</h4>
-      <div class="handle">@regust</div>
-      <a class="cbtn" href="#" target="_blank">View Profile</a>
-    </div>
   </div>
 </section>
 
@@ -707,19 +698,16 @@
 </button>
 
 <script>
-  // Nav scroll state
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
     navbar.classList.toggle('scrolled', window.scrollY > 40);
   });
 
-  // Burger menu
   const burger = document.getElementById('burger');
   const navLinks = document.getElementById('navLinks');
   burger.addEventListener('click', () => navLinks.classList.toggle('open'));
   navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
 
-  // Active link on scroll
   const sections = document.querySelectorAll('section[id], .hero[id]');
   const links = document.querySelectorAll('.nav-link');
   window.addEventListener('scroll', () => {
@@ -731,7 +719,6 @@
     links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
   });
 
-  // Typewriter
   const phrases = ["Building in Luau.", "Modular by design.", "Shipping clean systems."];
   let pIndex = 0, cIndex = 0, deleting = false;
   const sub = document.querySelector('.hero-sub');
@@ -750,14 +737,12 @@
   }
   setTimeout(typeLoop, 1600);
 
-  // Reveal on scroll
   const revealEls = document.querySelectorAll('.reveal');
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.15 });
   revealEls.forEach(el => io.observe(el));
 
-  // ---------- Ambient background music ----------
   let audioCtx, masterGain, filter, isPlaying = false, audioStarted = false;
   const musicBtn = document.getElementById('musicBtn');
 
@@ -772,8 +757,7 @@
     filter.frequency.value = 900;
     filter.connect(masterGain);
 
-    // soft minor-ish chord pad, detuned slightly for width
-    const notes = [130.81, 155.56, 196.00, 233.08]; // C3, Eb3, G3, Bb3
+    const notes = [130.81, 155.56, 196.00, 233.08];
     notes.forEach((freq, i) => {
       const osc = audioCtx.createOscillator();
       osc.type = 'sine';
@@ -793,7 +777,6 @@
       lfo.start();
     });
 
-    // slow filter sweep for movement
     const filterLfo = audioCtx.createOscillator();
     filterLfo.frequency.value = 0.025;
     const filterLfoGain = audioCtx.createGain();
@@ -829,7 +812,6 @@
 
   musicBtn.addEventListener('click', toggleMusic);
 
-  // Copy discord
   function copyDiscord(){
     navigator.clipboard.writeText('tetostixxx').then(() => {
       const btn = event.target;
@@ -839,7 +821,6 @@
     });
   }
 
-  // Background particle network
   const canvas = document.getElementById('bg-canvas');
   const ctx = canvas.getContext('2d');
   let w, h, particles;
@@ -887,4 +868,4 @@
 </script>
 
 </body>
-</html>>
+</html>
